@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة السلامة من الحرائق - المستشفى</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            direction: rtl;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 400px;
+            margin: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .form-container {
+            padding: 40px 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-left: 10px;
+            transform: scale(1.2);
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .links a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+            margin: 0 10px;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .form-container {
+                padding: 30px 20px;
+            }
+            
+            .header {
+                padding: 25px 20px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+        }
+
+        /* تحسينات للأجهزة المحمولة */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .form-group input {
+                font-size: 16px; /* منع التكبير في iOS */
+            }
+        }
+
+        /* دعم الوضع الليلي */
+        @media (prefers-color-scheme: dark) {
+            .container {
+                background: #2d3748;
+                color: white;
+            }
+            
+            .form-group input {
+                background: #4a5568;
+                border-color: #718096;
+                color: white;
+            }
+            
+            .form-group input:focus {
+                background: #4a5568;
+                border-color: #667eea;
+            }
+            
+            .form-group label {
+                color: #e2e8f0;
+            }
+            
+            .checkbox-group label {
+                color: #cbd5e0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 نظام إدارة السلامة من الحرائق</h1>
+            <p>نظام شامل لإدارة أمن وسلامة المستشفى</p>
+        </div>
+        
+        <div class="form-container">
+            <div class="alert alert-success" id="successAlert"></div>
+            <div class="alert alert-error" id="errorAlert"></div>
+            <div class="loading" id="loading">جاري التحميل...</div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">البريد الإلكتروني</label>
+                    <input type="email" id="email" name="email" required placeholder="أدخل البريد الإلكتروني">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">كلمة المرور</label>
+                    <input type="password" id="password" name="password" required placeholder="أدخل كلمة المرور">
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="rememberMe" name="rememberMe">
+                    <label for="rememberMe">تذكرني</label>
+                </div>
+                
+                <button type="submit" class="btn">تسجيل الدخول</button>
+                <button type="button" class="btn btn-secondary" id="changePasswordBtn">تغيير كلمة المرور</button>
+            </form>
+            
+            <div class="links">
+                <a href="#" id="forgotPasswordLink">نسيت كلمة المرور؟</a>
+                <a href="#" id="helpLink">المساعدة</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // تحميل البيانات المحفوظة
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedEmail = localStorage.getItem('rememberedEmail');
+            const rememberMe = localStorage.getItem('rememberMe') === 'true';
+            
+            if (savedEmail && rememberMe) {
+                document.getElementById('email').value = savedEmail;
+                document.getElementById('rememberMe').checked = true;
+            }
+        });
+
+        // معالج تسجيل الدخول
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            
+            showLoading(true);
+            hideAlerts();
+            
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password, rememberMe })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // حفظ البيانات إذا كان المستخدم يريد التذكر
+                    if (rememberMe) {
+                        localStorage.setItem('rememberedEmail', email);
+                        localStorage.setItem('rememberMe', 'true');
+                    } else {
+                        localStorage.removeItem('rememberedEmail');
+                        localStorage.removeItem('rememberMe');
+                    }
+                    
+                    // حفظ معلومات المستخدم
+                    localStorage.setItem('userToken', data.token);
+                    localStorage.setItem('userInfo', JSON.stringify(data.user));
+                    
+                    showAlert('تم تسجيل الدخول بنجاح! جاري التوجيه...', 'success');
+                    
+                    // التوجيه إلى لوحة التحكم
+                    setTimeout(() => {
+                        window.location.href = '/dashboard.html';
+                    }, 1500);
+                } else {
+                    showAlert(data.message || 'خطأ في تسجيل الدخول', 'error');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showAlert('حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى.', 'error');
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        // معالج تغيير كلمة المرور
+        document.getElementById('changePasswordBtn').addEventListener('click', function() {
+            const email = document.getElementById('email').value;
+            if (!email) {
+                showAlert('يرجى إدخال البريد الإلكتروني أولاً', 'error');
+                return;
+            }
+            
+            // فتح نافذة تغيير كلمة المرور
+            window.location.href = `/change-password.html?email=${encodeURIComponent(email)}`;
+        });
+
+        // معالج نسيان كلمة المرور
+        document.getElementById('forgotPasswordLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            if (email) {
+                window.location.href = `/forgot-password.html?email=${encodeURIComponent(email)}`;
+            } else {
+                window.location.href = '/forgot-password.html';
+            }
+        });
+
+        // معالج المساعدة
+        document.getElementById('helpLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = '/help.html';
+        });
+
+        // دوال مساعدة
+        function showAlert(message, type) {
+            hideAlerts();
+            const alertElement = document.getElementById(type === 'success' ? 'successAlert' : 'errorAlert');
+            alertElement.textContent = message;
+            alertElement.style.display = 'block';
+            
+            // إخفاء التنبيه بعد 5 ثوان
+            setTimeout(() => {
+                alertElement.style.display = 'none';
+            }, 5000);
+        }
+
+        function hideAlerts() {
+            document.getElementById('successAlert').style.display = 'none';
+            document.getElementById('errorAlert').style.display = 'none';
+        }
+
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+            const submitBtn = document.querySelector('button[type="submit"]');
+            submitBtn.disabled = show;
+            submitBtn.textContent = show ? 'جاري تسجيل الدخول...' : 'تسجيل الدخول';
+        }
+
+        // دعم اختصارات لوحة المفاتيح
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // حفظ تلقائي للبيانات المدخلة
+        let autoSaveTimeout;
+        document.getElementById('email').addEventListener('input', function() {
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(() => {
+                if (document.getElementById('rememberMe').checked) {
+                    localStorage.setItem('draftEmail', this.value);
+                }
+            }, 1000);
+        });
+
+        // استعادة البيانات المسودة
+        const draftEmail = localStorage.getItem('draftEmail');
+        if (draftEmail && !document.getElementById('email').value) {
+            document.getElementById('email').value = draftEmail;
+        }
+    </script>
+</body>
+</html>
+
